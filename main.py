@@ -3,6 +3,7 @@ from core.database import DatabaseManager
 from core.seeder_logic import NarrativeSeeder
 
 def reset_database():
+    
     # Clear all data from both databases
     db = DatabaseManager()
     
@@ -23,6 +24,7 @@ def reset_database():
         print(f"   -> Erreur Neo4j: {e}")
 
 def print_stats():
+    
     # Display database statistics
     db = DatabaseManager()
     
@@ -32,6 +34,7 @@ def print_stats():
     nb_incidents = db.mongo_db.tweets.count_documents({"is_incident": True})
 
 def main():
+    
     # Clean existing data
     reset_database()
 

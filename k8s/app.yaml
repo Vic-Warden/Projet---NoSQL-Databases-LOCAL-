@@ -1,0 +1,53 @@
+# Deployment for the Streamlit app
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: milano-app-deployment
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: milano-app
+  template:
+    metadata:
+      labels:
+        app: milano-app
+    spec:
+      
+      # Run seeder before starting the app
+      initContainers:
+      - name: seeder
+        image: warden1983/milano-app:latest
+        command: ["python", "main.py"]
+        env:
+        - name: MONGO_URI
+          value: "mongodb://mongo-service:27017"
+        - name: NEO4J_URI
+          value: "bolt://neo4j-service:7687"
+      
+      # Main app container
+      containers:
+      - name: streamlit
+        image: warden1983/milano-app:latest
+        ports:
+        - containerPort: 8501
+        env:
+        - name: MONGO_URI
+          value: "mongodb://mongo-service:27017"
+        - name: NEO4J_URI
+          value: "bolt://neo4j-service:7687"
+
+---
+
+# Expose the app externally
+apiVersion: v1
+kind: Service
+metadata:
+  name: milano-app-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: milano-app
+  ports:
+  - port: 8501
+    targetPort: 8501
