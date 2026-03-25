@@ -18,6 +18,7 @@ spec:
       initContainers:
       - name: seeder
         image: warden1983/milano-app:latest
+        imagePullPolicy: Never
         command: ["python", "main.py"]
         env:
         - name: MONGO_URI
@@ -29,6 +30,7 @@ spec:
       containers:
       - name: streamlit
         image: warden1983/milano-app:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 8501
         env:

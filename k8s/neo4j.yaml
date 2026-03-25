@@ -16,6 +16,7 @@ spec:
       containers:
       - name: neo4j
         image: neo4j:latest
+        imagePullPolicy: Never
         env:
         
         # Disable authentication
